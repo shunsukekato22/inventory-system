@@ -24,8 +24,11 @@ while True:
             print(f'{item_name}を登録しました')
 
 #入庫
-    if choice == '2':
-        stock = input('入庫数を入力してください').strip()
+    elif choice == '2':
+        for item in inventory:
+            print(f'{item}:{inventory[item]['stock']}')
 
-        if stock == '':
-            print
+        item_name
+
+        
+        
