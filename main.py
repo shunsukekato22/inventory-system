@@ -62,7 +62,16 @@ while True:
             print('商品が登録されていません')
 
 #一覧表示
-    
+    elif choice == '4':
+        print('===在庫一覧===')
+
+        if not inventory:
+            print('在庫が登録されていません')
+
+        for item in inventory:
+            print(f'{item} : {inventory[item]['stock']}')
+
+
 
         
         
