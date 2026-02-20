@@ -25,10 +25,44 @@ while True:
 
 #入庫
     elif choice == '2':
+        print('現在の在庫')
         for item in inventory:
-            print(f'{item}:{inventory[item]['stock']}')
+            print(f'{item}:{inventory[item]["stock"]}')
+            
+        item = input('入庫する商品を入力してください:')
 
-        item_name
+        if item in inventory:
+            num = int(input('入庫数を入力してください:'))
+            inventory[item]['stock'] += num
+            print(f'現在の在庫は {inventory[item]["stock"]} 個')
+        
+        else:
+            print('商品が登録されていません')
+
+#出庫
+    elif choice == '3':
+        print('現在の在庫')
+        for item in inventory:
+            print(f'{item}:{inventory[item]["stock"]}')
+            
+        item = input('出庫する商品を入力してください:')
+
+        if item in inventory:
+            num = int(input('出庫数を入力してください:'))
+            if inventory[item]['stock'] >= num:
+                inventory[item]['stock'] -= num
+                print(f'現在の{item} の在庫は {inventory[item]["stock"]} 個')
+                if inventory[item]['stock'] == 0:
+                    print('在庫がゼロになりました!')
+
+            else:
+                print('在庫が足りません')
+        
+        else:
+            print('商品が登録されていません')
+
+#一覧表示
+    
 
         
         
