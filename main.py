@@ -35,7 +35,10 @@ while True:
             num = int(input('入庫数を入力してください:'))
             inventory[item]['stock'] += num
             print(f'現在の在庫は {inventory[item]["stock"]} 個')
-        
+
+            if num == '':
+                print('入庫数を入力してください')        
+
         else:
             print('商品が登録されていません')
 
@@ -55,6 +58,9 @@ while True:
                 if inventory[item]['stock'] == 0:
                     print('在庫がゼロになりました!')
 
+            elif num == '' or 0:
+                print('出庫数を入力してください')
+
             else:
                 print('在庫が足りません')
         
@@ -69,7 +75,9 @@ while True:
             print('在庫が登録されていません')
 
         for item in inventory:
-            print(f'{item} : {inventory[item]['stock']}')
+            print(f'{item} : {inventory[item]["stock"]}')
+
+
 
 
 
