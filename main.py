@@ -32,13 +32,15 @@ while True:
         item = input('入庫する商品を入力してください:')
 
         if item in inventory:
-            num = int(input('入庫数を入力してください:'))
-            inventory[item]['stock'] += num
-            print(f'現在の在庫は {inventory[item]["stock"]} 個')
+            num_input = input('入庫数を入力してください:')
 
-            if num == '':
-                print('入庫数を入力してください')        
-
+            if num_input == '':
+                print('入庫数を入力してください')
+            else:
+                num = int(num_input)
+                inventory[item]['stock'] += num
+                print(f'現在の在庫は {inventory[item]["stock"]} 個')
+       
         else:
             print('商品が登録されていません')
 
@@ -51,18 +53,21 @@ while True:
         item = input('出庫する商品を入力してください:')
 
         if item in inventory:
-            num = int(input('出庫数を入力してください:'))
-            if inventory[item]['stock'] >= num:
-                inventory[item]['stock'] -= num
-                print(f'現在の{item} の在庫は {inventory[item]["stock"]} 個')
-                if inventory[item]['stock'] == 0:
-                    print('在庫がゼロになりました!')
+            num_input = input('出庫数を入力してください:')
 
-            elif num == '' or 0:
-                print('出庫数を入力してください')
-
+            if num_input == '':
+                print('出庫数を入力してください:')
             else:
-                print('在庫が足りません')
+                num = int(num_input)
+                if inventory[item]['stock'] >= num:
+                    inventory[item]['stock'] -= num
+                    print(f'現在の{item} の在庫は {inventory[item]["stock"]} 個')
+                
+                    if inventory[item]['stock'] == 0:
+                        print('在庫がゼロになりました!')
+
+                else:
+                    print('在庫が足りません')
         
         else:
             print('商品が登録されていません')
@@ -73,9 +78,10 @@ while True:
 
         if not inventory:
             print('在庫が登録されていません')
-
-        for item in inventory:
-            print(f'{item} : {inventory[item]["stock"]}')
+        
+        else:
+            for item in inventory:
+                print(f'{item} : {inventory[item]["stock"]}')
 
 
 
