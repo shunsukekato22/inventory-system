@@ -1,3 +1,4 @@
+import json
 inventory = {}
 
 while True:
@@ -25,6 +26,10 @@ while True:
 
 #入庫
     elif choice == '2':
+        if not inventory:
+            print("商品が登録されていません")
+            continue
+
         print('現在の在庫')
         for item in inventory:
             print(f'{item}:{inventory[item]["stock"]}')
@@ -37,15 +42,22 @@ while True:
             if num_input == '':
                 print('入庫数を入力してください')
             else:
-                num = int(num_input)
-                inventory[item]['stock'] += num
-                print(f'現在の在庫は {inventory[item]["stock"]} 個')
-       
+                try:
+                    num = int(num_input)
+                    inventory[item]['stock'] += num
+                    print(f'現在の在庫は {inventory[item]["stock"]} 個')
+
+                except ValueError:
+                    print('数字を入力してください')
         else:
             print('商品が登録されていません')
 
 #出庫
     elif choice == '3':
+        if not inventory:
+            print("商品が登録されていません")
+            continue
+
         print('現在の在庫')
         for item in inventory:
             print(f'{item}:{inventory[item]["stock"]}')
@@ -58,13 +70,16 @@ while True:
             if num_input == '':
                 print('出庫数を入力してください:')
             else:
-                num = int(num_input)
-                if inventory[item]['stock'] >= num:
-                    inventory[item]['stock'] -= num
-                    print(f'現在の{item} の在庫は {inventory[item]["stock"]} 個')
-                
-                    if inventory[item]['stock'] == 0:
-                        print('在庫がゼロになりました!')
+                try:
+                    num = int(num_input)
+                    if inventory[item]['stock'] >= num:
+                        inventory[item]['stock'] -= num
+                        print(f'現在の{item} の在庫は {inventory[item]["stock"]} 個')
+                    
+                        if inventory[item]['stock'] == 0:
+                            print('在庫がゼロになりました!')
+                except ValueError:
+                    print('数字を入力してください')
 
                 else:
                     print('在庫が足りません')
@@ -84,8 +99,3 @@ while True:
                 print(f'{item} : {inventory[item]["stock"]}')
 
 
-
-
-
-        
-        
