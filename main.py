@@ -1,5 +1,9 @@
 import json
-inventory = {}
+try:
+    with open("inventory.json", "r", encoding="utf-8") as f:
+        inventory = json.load(f)
+except FileNotFoundError:
+    inventory = {}
 
 while True:
     print('1.商品登録')
@@ -10,7 +14,7 @@ while True:
 
     choice = input('番号を選んでください:')
 
-#商品登録
+#1.商品登録
     if choice == '1':
         item_name = input('商品名を入力してください:').strip()
 
@@ -24,7 +28,7 @@ while True:
             inventory[item_name] = {'stock' : 0}
             print(f'{item_name}を登録しました')
 
-#入庫
+#2.入庫
     elif choice == '2':
         if not inventory:
             print("商品が登録されていません")
@@ -52,7 +56,7 @@ while True:
         else:
             print('商品が登録されていません')
 
-#出庫
+#3.出庫
     elif choice == '3':
         if not inventory:
             print("商品が登録されていません")
@@ -87,7 +91,7 @@ while True:
         else:
             print('商品が登録されていません')
 
-#一覧表示
+#4.一覧表示
     elif choice == '4':
         print('===在庫一覧===')
 
@@ -98,4 +102,10 @@ while True:
             for item in inventory:
                 print(f'{item} : {inventory[item]["stock"]}')
 
+#5.終了
+    elif choice == '5':
+       with open("inventory.json", "w", encoding="utf-8") as f:
+        json.dump(inventory, f, ensure_ascii=False, indent=4)
 
+    print("データを保存しました。終了します。")
+    break 
