@@ -1,66 +1,63 @@
 import json
-try:
-    with open("inventory.json", "r", encoding="utf-8") as f:
-        inventory = json.load(f)
-except FileNotFoundError:
-    inventory = {}
 
-while True:
-    print('1.商品登録')
-    print('2.入庫')
-    print('3.出庫')
-    print('4.一覧表示')
-    print('5.終了')
+def load_inventory():
+    try:
+        with open("inventory.json", "r", encoding="utf-8") as f:
+            inventory = json.load(f)
+    except FileNotFoundError:
+        inventory = {}
 
-    choice = input('番号を選んでください:')
+
 
 #1.商品登録
-    if choice == '1':
-        item_name = input('商品名を入力してください:').strip()
+def register_item(inventory):
+    
+    item_name = input('商品名を入力してください:').strip()
 
-        if item_name == '' :
-            print('商品名を入力してください')
-        
-        elif item_name in inventory:
-            print('その商品は既に登録されています')
+    if item_name == '' :
+        print('商品名を入力してください')
+    
+    elif item_name in inventory:
+        print('その商品は既に登録されています')
 
-        else:
-            inventory[item_name] = {'stock' : 0}
-            print(f'{item_name}を登録しました')
+    else:
+        inventory[item_name] = {'stock' : 0}
+        print(f'{item_name}を登録しました')
 
 #2.入庫
-    elif choice == '2':
-        if not inventory:
-            print("商品が登録されていません")
-            continue
+def stock_in(inventory):
+    if not inventory:
+        print("商品が登録されていません")
+        return
 
-        print('現在の在庫')
-        for item in inventory:
-            print(f'{item}:{inventory[item]["stock"]}')
-            
-        item = input('入庫する商品を入力してください:')
+    print('現在の在庫')
+    for item in inventory:
+        print(f'{item}:{inventory[item]["stock"]}')
+        
+    item = input('入庫する商品を入力してください:')
 
-        if item in inventory:
-            num_input = input('入庫数を入力してください:')
+    if item in inventory:
+        num_input = input('入庫数を入力してください:')
 
-            if num_input == '':
-                print('入庫数を入力してください')
-            else:
-                try:
-                    num = int(num_input)
-                    inventory[item]['stock'] += num
-                    print(f'現在の在庫は {inventory[item]["stock"]} 個')
-
-                except ValueError:
-                    print('数字を入力してください')
+        if num_input == '':
+            print('入庫数を入力してください')
         else:
-            print('商品が登録されていません')
+            try:
+                num = int(num_input)
+                inventory[item]['stock'] += num
+                print(f'現在の在庫は {inventory[item]["stock"]} 個')
+
+            except ValueError:
+                print('数字を入力してください')
+    else:
+        print('商品が登録されていません')
 
 #3.出庫
-    elif choice == '3':
+def stock_out(inventory):
+    if not inventory:
         if not inventory:
             print("商品が登録されていません")
-            continue
+            return
 
         print('現在の在庫')
         for item in inventory:
@@ -92,20 +89,47 @@ while True:
             print('商品が登録されていません')
 
 #4.一覧表示
-    elif choice == '4':
-        print('===在庫一覧===')
+def display_inventory(inventory):
+    print('===在庫一覧===')
 
-        if not inventory:
-            print('在庫が登録されていません')
-        
-        else:
-            for item in inventory:
-                print(f'{item} : {inventory[item]["stock"]}')
+    if not inventory:
+        print('在庫が登録されていません')
+    
+    else:
+        for item in inventory:
+            print(f'{item} : {inventory[item]["stock"]}')
 
 #5.終了
-    elif choice == '5':
-       with open("inventory.json", "w", encoding="utf-8") as f:
+def save_and_exit(inventory):
+    with open("inventory.json", "w", encoding="utf-8") as f:
         json.dump(inventory, f, ensure_ascii=False, indent=4)
 
-    print("データを保存しました。終了します。")
-    break 
+print("データを保存しました。終了します。")
+
+
+#メインループ
+def main():
+    inventory = load_inventory()
+
+    while True:
+        print('\n1.商品登録')
+        print('2.入庫')
+        print('3.出庫')
+        print('4.一覧表示')
+        print('5.終了')
+
+        choice = input('番号を選んでください:')
+
+        if choice == '1':
+            register_item(inventory)
+        elif choice == '2':
+            stock_in(inventory)
+        elif choice == '3':
+            stock_out(inventory)
+        elif choice == '4':
+            display_inventory(inventory)
+        elif choice == '5':
+            save_and_exit(inventory)
+            break
+        else:
+            print('無効な選択です。')
