@@ -134,4 +134,5 @@ def main():
         else:
             print('無効な選択です。')
 
-            
+if __name__ == '__main__':
+    main()
