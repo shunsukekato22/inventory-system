@@ -12,6 +12,33 @@ class InventoryManager:
         except FileNotFoundError:
             return {}
 
+    # 共通: 在庫一覧を表示する
+    def _show_inventory(self):
+        print('現在の在庫')
+        for item, data in self.inventory.items():
+            print(f'{item}:{data["stock"]}')
+
+    # 共通: 数値を入力させる（0以下はエラー）
+    def _input_number(self, prompt):
+        num_input = input(prompt)
+        if num_input == '':
+            print('数を入力してください')
+            return None
+        try:
+            num = int(num_input)
+            if num <= 0:
+                print('1以上の数を入力してください')
+                return None
+            return num
+        except ValueError:
+            print('数字を入力してください')
+            return None
+
+    # 共通: 変更後に自動保存する
+    def _save(self):
+        with open("inventory.json", "w", encoding="utf-8") as f:
+            json.dump(self.inventory, f, ensure_ascii=False, indent=4)
+
     # 1. 商品登録
     def register_item(self):
         item_name = input('商品名を入力してください:').strip()
@@ -23,6 +50,7 @@ class InventoryManager:
         else:
             self.inventory[item_name] = {'stock': 0}
             print(f'{item_name}を登録しました')
+            self._save()
 
     # 2. 入庫
     def stock_in(self):
@@ -30,26 +58,18 @@ class InventoryManager:
             print("商品が登録されていません")
             return
 
-        print('現在の在庫')
-        for item, data in self.inventory.items():
-            print(f'{item}:{data["stock"]}')
-
+        self._show_inventory()
         item = input('入庫する商品を入力してください:')
 
         if item not in self.inventory:
             print('商品が登録されていません')
             return
 
-        num_input = input('入庫数を入力してください:')
-        if num_input == '':
-            print('入庫数を入力してください')
-        else:
-            try:
-                num = int(num_input)
-                self.inventory[item]['stock'] += num
-                print(f'現在の在庫は {self.inventory[item]["stock"]} 個')
-            except ValueError:
-                print('数字を入力してください')
+        num = self._input_number('入庫数を入力してください:')
+        if num is not None:
+            self.inventory[item]['stock'] += num
+            print(f'現在の在庫は {self.inventory[item]["stock"]} 個')
+            self._save()
 
     # 3. 出庫
     def stock_out(self):
@@ -57,31 +77,23 @@ class InventoryManager:
             print("商品が登録されていません")
             return
 
-        print('現在の在庫')
-        for item, data in self.inventory.items():
-            print(f'{item}:{data["stock"]}')
-
+        self._show_inventory()
         item = input('出庫する商品を入力してください:')
 
         if item not in self.inventory:
             print('商品が登録されていません')
             return
 
-        num_input = input('出庫数を入力してください:')
-        if num_input == '':
-            print('出庫数を入力してください')
-        else:
-            try:
-                num = int(num_input)
-                if self.inventory[item]['stock'] >= num:
-                    self.inventory[item]['stock'] -= num
-                    print(f'現在の{item}の在庫は {self.inventory[item]["stock"]} 個')
-                    if self.inventory[item]['stock'] == 0:
-                        print('在庫がゼロになりました!')
-                else:
-                    print('在庫が足りません')
-            except ValueError:
-                print('数字を入力してください')
+        num = self._input_number('出庫数を入力してください:')
+        if num is not None:
+            if self.inventory[item]['stock'] >= num:
+                self.inventory[item]['stock'] -= num
+                print(f'現在の{item}の在庫は {self.inventory[item]["stock"]} 個')
+                if self.inventory[item]['stock'] == 0:
+                    print('在庫がゼロになりました!')
+                self._save()
+            else:
+                print('在庫が足りません')
 
     # 4. 一覧表示
     def display_inventory(self):
@@ -92,11 +104,9 @@ class InventoryManager:
             for item, data in self.inventory.items():
                 print(f'{item} : {data["stock"]}')
 
-    # 5. 保存して終了
-    def save_and_exit(self):
-        with open("inventory.json", "w", encoding="utf-8") as f:
-            json.dump(self.inventory, f, ensure_ascii=False, indent=4)
-        print("データを保存しました。終了します。")
+    # 5. 終了
+    def exit(self):
+        print("終了します。")
 
     # メインループ
     def run(self):
@@ -118,7 +128,7 @@ class InventoryManager:
             elif choice == '4':
                 self.display_inventory()
             elif choice == '5':
-                self.save_and_exit()
+                self.exit()
                 break
             else:
                 print('無効な選択です。')
