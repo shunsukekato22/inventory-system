@@ -21,9 +21,6 @@ class InventoryManager:
     # 共通: 数値を入力させる（0以下はエラー）
     def _input_number(self, prompt):
         num_input = input(prompt)
-        if num_input == '':
-            print('数を入力してください')
-            return None
         try:
             num = int(num_input)
             if num <= 0:
@@ -59,7 +56,7 @@ class InventoryManager:
             return
 
         self._show_inventory()
-        item = input('入庫する商品を入力してください:')
+        item = input('入庫する商品を入力してください:').strip()
 
         if item not in self.inventory:
             print('商品が登録されていません')
@@ -78,7 +75,7 @@ class InventoryManager:
             return
 
         self._show_inventory()
-        item = input('出庫する商品を入力してください:')
+        item = input('出庫する商品を入力してください:').strip()
 
         if item not in self.inventory:
             print('商品が登録されていません')
@@ -104,7 +101,28 @@ class InventoryManager:
             for item, data in self.inventory.items():
                 print(f'{item} : {data["stock"]}')
 
-    # 5. 終了
+    # 5. 商品削除
+    def delete_item(self):
+        if not self.inventory:
+            print("商品が登録されていません")
+            return
+
+        self._show_inventory()
+        item_name = input('削除する商品名を入力してください:').strip()
+
+        if item_name not in self.inventory:
+            print('商品が登録されていません')
+            return
+
+        confirm = input(f'"{item_name}"を削除しますか？ (y/n):').strip()
+        if confirm == 'y':
+            del self.inventory[item_name]
+            print(f'{item_name}を削除しました')
+            self._save()
+        else:
+            print('削除をキャンセルしました')
+
+    # 6. 終了
     def exit(self):
         print("終了します。")
 
@@ -115,7 +133,8 @@ class InventoryManager:
             print('2.入庫')
             print('3.出庫')
             print('4.一覧表示')
-            print('5.終了')
+            print('5.商品削除')
+            print('6.終了')
 
             choice = input('番号を選んでください:')
 
@@ -128,6 +147,8 @@ class InventoryManager:
             elif choice == '4':
                 self.display_inventory()
             elif choice == '5':
+                self.delete_item()
+            elif choice == '6':
                 self.exit()
                 break
             else:
