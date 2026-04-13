@@ -1,4 +1,4 @@
-# 📦 Inventory System
+﻿# 📦 Inventory System
 
 Pythonで作成したCLIベースの在庫管理システムです。
 商品の登録・入出庫・在庫確認をターミナル上で操作できます。
@@ -10,21 +10,24 @@ Pythonで作成したCLIベースの在庫管理システムです。
 
 ## セットアップ
 
-```bash
+\\\ash
 git clone https://github.com/shunsukekato22/inventory-system.git
 cd inventory-system
 python main.py
-```
+\\\
 
 ## 使い方
 
 起動するとメニューが表示されます。
+
+\\\
 1.商品登録
 2.入庫
 3.出庫
 4.一覧表示
 5.終了
 番号を選んでください:
+\\\
 
 | 番号 | 機能 | 説明 |
 |------|------|------|
@@ -34,19 +37,22 @@ python main.py
 | 4 | 一覧表示 | 現在の全在庫を表示します |
 | 5 | 終了 | アプリを終了します |
 
-操作のたびに `inventory.json` へ自動保存されます。
+操作のたびに inventory.json へ自動保存されます。
 
 ## ファイル構成
+
+\\\
 inventory-system/
 ├── main.py          # メインプログラム
 ├── inventory.json   # 在庫データ（自動生成）
 └── README.md
+\\\
 
 ## 技術的なポイント
 
-- `InventoryManager` クラスで在庫データと操作を一元管理
-- `_load()` / `_save()` で JSON ファイルへの永続化を実装
-- `_input_number()` で数値入力の共通バリデーション処理を共通化
+- InventoryManager クラスで在庫データと操作を一元管理
+- _load() / _save() で JSON ファイルへの永続化を実装
+- _input_number() で数値入力の共通バリデーション処理を共通化
 - 不正入力・存在しない商品・在庫不足などの例外処理を実装済み
 
 ## 今後の予定
