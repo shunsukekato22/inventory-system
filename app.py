@@ -1,12 +1,20 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 from main import InventoryManager
 
 app = Flask(__name__)
+app.secret_key = 'inventory-secret-key'
 manager = InventoryManager()
 
 @app.route('/')
 def index():
     return render_template('index.html', inventory=manager.inventory)
+
+@app.route('/register', methods=['POST'])
+def register():
+    item_name = request.form.get('item_name', '')
+    success, message = manager.register_item_web(item_name)
+    flash(message, 'success' if success else 'error')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
